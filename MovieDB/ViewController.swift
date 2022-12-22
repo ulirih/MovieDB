@@ -13,9 +13,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         title = "MovieDB"
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
     }
-
-
 }
 
