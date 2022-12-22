@@ -56,11 +56,11 @@
 		55A5D5A1295321A70049533D /* MovieDB */ = {
 			isa = PBXGroup;
 			children = (
+				55A5D5B8295322DB0049533D /* Resources */,
+				55A5D5B7295322C20049533D /* Views */,
 				55A5D5B62953224C0049533D /* Application */,
 				55A5D5A6295321A70049533D /* ViewController.swift */,
 				55A5D5A8295321A70049533D /* Main.storyboard */,
-				55A5D5AB295321AA0049533D /* Assets.xcassets */,
-				55A5D5AD295321AA0049533D /* LaunchScreen.storyboard */,
 				55A5D5B0295321AA0049533D /* Info.plist */,
 			);
 			path = MovieDB;
@@ -73,6 +73,22 @@
 				55A5D5A4295321A70049533D /* SceneDelegate.swift */,
 			);
 			path = Application;
+			sourceTree = "<group>";
+		};
+		55A5D5B7295322C20049533D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				55A5D5AD295321AA0049533D /* LaunchScreen.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		55A5D5B8295322DB0049533D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				55A5D5AB295321AA0049533D /* Assets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
