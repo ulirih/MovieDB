@@ -20,7 +20,7 @@ class Service: ServiceProtocol {
     }
     
     func fetchTrending(page: Int, completion: @escaping (Result<TrendingListModel, NetworkErrorType>) -> Void) {
-        let urlString = "\(baseUrl)/trending/all/day?api_key=\(apiKey)"
+        let urlString = "\(baseUrl)/trending/all/day?api_key=\(apiKey)&page=\(String(describing: page))"
         
         baseRequest(for: urlString) { result in
             DispatchQueue.main.async { completion(result) }

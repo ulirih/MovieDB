@@ -1,35 +1,39 @@
 //
-//  ViewController.swift
+//  MainViewModel.swift
 //  MovieDB
 //
-//  Created by andrey perevedniuk on 21.12.2022.
+//  Created by andrey perevedniuk on 23.12.2022.
 //
 
-import UIKit
+import Foundation
 
-class ViewController: UIViewController {
-    private var service: ServiceProtocol!
+protocol MainViewModelProtocol: AnyObject {
+    func fetchData() -> Void
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        title = "MovieDB"
-        view.backgroundColor = .systemBackground
-        service = Service()
+class MainViewModel: MainViewModelProtocol {
+    private let service: ServiceProtocol
+    
+    init(service: ServiceProtocol) {
+        self.service = service
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    func fetchData() {
+        let group = DispatchGroup()
         
+        group.enter()
         service.fetchNowPlaying { result in
+            print(Thread.isMainThread)
             switch result {
             case .success(let movies):
                 print(movies.results.count)
             case .failure(let error):
                 print(error.localizedDescription)
             }
+            group.leave()
         }
         
+        group.enter()
         service.fetchTrending(page: 1) { result in
             switch result {
             case .success(let movies):
@@ -37,7 +41,7 @@ class ViewController: UIViewController {
             case .failure(let error):
                 print(error.localizedDescription)
             }
+            group.leave()
         }
     }
 }
-
