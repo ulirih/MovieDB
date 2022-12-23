@@ -8,6 +8,12 @@
 import Foundation
 
 protocol ServiceProtocol: AnyObject {
-    func fetchNowPlaying(page: Int, completion: (Result<MovieListModel, Error>) -> Void)
-    func fetchTrending(page: Int, completion: (Result<TrendingListModel, Error>) -> Void)
+    func fetchNowPlaying(completion: @escaping (Result<MovieListModel, NetworkErrorType>) -> Void)
+    func fetchTrending(page: Int, completion: @escaping (Result<TrendingListModel, NetworkErrorType>) -> Void)
+}
+
+enum NetworkErrorType: Error {
+    case incorrectUrlError
+    case parseError
+    case serviceError
 }
