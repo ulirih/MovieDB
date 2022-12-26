@@ -6,9 +6,12 @@
 //
 
 import UIKit
+import RxSwift
 
 class MainViewController: UIViewController {
-    var viewModel: MainViewModelProtocol!
+    private let disposeBag = DisposeBag()
+    
+    var viewModel = MainViewModel(service: Service())
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,7 +19,9 @@ class MainViewController: UIViewController {
         title = "MovieDB"
         view.backgroundColor = .systemBackground
         
-        viewModel = MainViewModel(service: Service())
+        setupView()
+        setupBind()
+        setupConstraints()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -24,5 +29,44 @@ class MainViewController: UIViewController {
         
         viewModel.fetchData()
     }
+    
+    private func setupView() {
+        view.addSubview(loader)
+    }
+    
+    private func setupBind() {
+        viewModel.nowPlaying
+            .subscribe(onNext: { movies in
+                print(movies.count)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.trendings
+            .subscribe(onNext: { movies in
+                print(movies.count)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.isLoading
+            .subscribe(onNext: { isLoading in
+                _ = isLoading ? self.loader.startAnimating() : self.loader.stopAnimating()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            loader.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loader.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+    private let loader: UIActivityIndicatorView = {
+        let loader = UIActivityIndicatorView()
+        loader.translatesAutoresizingMaskIntoConstraints = false
+        loader.style = .large
+        
+        return loader
+    }()
 }
 
