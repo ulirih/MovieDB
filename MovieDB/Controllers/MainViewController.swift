@@ -7,11 +7,14 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 
 class MainViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     var viewModel = MainViewModel(service: Service())
+    
+    private var trends: [TrendingModel] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +34,11 @@ class MainViewController: UIViewController {
     }
     
     private func setupView() {
-        view.addSubview(loader)
+        view.addSubview(loaderView)
+        view.addSubview(collectionView)
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
     }
     
     private func setupBind() {
@@ -42,31 +49,61 @@ class MainViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.trendings
-            .subscribe(onNext: { movies in
+            .subscribe(onNext: { [weak self] movies in
+                self?.trends = movies
+                self?.collectionView.reloadData()
                 print(movies.count)
             })
             .disposed(by: disposeBag)
         
         viewModel.isLoading
-            .subscribe(onNext: { isLoading in
-                _ = isLoading ? self.loader.startAnimating() : self.loader.stopAnimating()
-            })
+            .bind(to: loaderView.rx.isAnimating)
             .disposed(by: disposeBag)
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            loader.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loader.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            loaderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loaderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
         ])
     }
     
-    private let loader: UIActivityIndicatorView = {
+    private let loaderView: UIActivityIndicatorView = {
         let loader = UIActivityIndicatorView()
         loader.translatesAutoresizingMaskIntoConstraints = false
         loader.style = .large
         
         return loader
     }()
+    
+    private let collectionView: UICollectionView = {
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "TrendingCellId")
+        
+        return collection
+    }()
+}
+
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return trends.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCellId", for: indexPath)
+        cell.backgroundColor = .green
+        
+        return cell
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        1
+    }
 }
 

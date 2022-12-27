@@ -31,7 +31,7 @@ class MainViewModel: MainViewModelProtocol {
         
         let group = DispatchGroup()
         group.enter()
-        service.fetchNowPlaying {[weak self] result in
+        service.fetchNowPlaying { [weak self] result in
             switch result {
             case .success(let movies):
                 self?.nowPlaying.onNext(movies.results)
@@ -42,11 +42,12 @@ class MainViewModel: MainViewModelProtocol {
         }
         
         group.enter()
-        service.fetchTrending(page: 1) {[weak self] result in
+        service.fetchTrending(page: 1) { [weak self] result in
             switch result {
             case .success(let trendings):
                 self?.isLoading.onNext(false)
                 self?.trendings.onNext(trendings.results)
+                
             case .failure(let error):
                 print(error.localizedDescription)
             }
