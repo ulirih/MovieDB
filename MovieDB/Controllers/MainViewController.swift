@@ -14,13 +14,15 @@ class MainViewController: UIViewController {
     
     var viewModel = MainViewModel(service: Service())
     
-    private var trends: [TrendingModel] = []
+    var collectionView: UICollectionView!
+    var snapshot: NSDiffableDataSourceSnapshot<MainViewSections, AnyHashable> = NSDiffableDataSourceSnapshot()
+    var dataSource: UICollectionViewDiffableDataSource<MainViewSections, AnyHashable>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "MovieDB"
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemBackground
         
         setupView()
         setupBind()
@@ -35,23 +37,39 @@ class MainViewController: UIViewController {
     
     private func setupView() {
         view.addSubview(loaderView)
-        view.addSubview(collectionView)
         
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        setupCollectionView()
+        view.addSubview(collectionView)
+        dataSource = UICollectionViewDiffableDataSource<MainViewSections, AnyHashable>(collectionView: collectionView, cellProvider: { (collectionView, path, object) -> UICollectionViewCell? in
+            switch path.section {
+            case MainViewSections.trendings.rawValue:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCellId", for: path)
+                cell.backgroundColor = .green
+                return cell
+            case MainViewSections.playingNow.rawValue:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCellId", for: path)
+                cell.backgroundColor = .yellow
+                return cell
+            default: return nil
+            }
+        })
     }
     
     private func setupBind() {
         viewModel.nowPlaying
-            .subscribe(onNext: { movies in
+            .subscribe(onNext: { [weak self] movies in
+                self?.snapshot.appendSections([.playingNow])
+                self?.snapshot.appendItems(movies, toSection: .playingNow)
+                self?.dataSource.apply(self!.snapshot)
                 print(movies.count)
             })
             .disposed(by: disposeBag)
         
         viewModel.trendings
             .subscribe(onNext: { [weak self] movies in
-                self?.trends = movies
-                self?.collectionView.reloadData()
+                self?.snapshot.appendSections([.trendings])
+                self?.snapshot.appendItems(movies, toSection: .trendings)
+                self?.dataSource.apply(self!.snapshot)
                 print(movies.count)
             })
             .disposed(by: disposeBag)
@@ -81,29 +99,54 @@ class MainViewController: UIViewController {
         return loader
     }()
     
-    private let collectionView: UICollectionView = {
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "TrendingCellId")
-        
-        return collection
-    }()
+    private func setupCollectionView() {
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "TrendingCellId")
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MovieCellId")
+    }
 }
 
-extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return trends.count
+extension MainViewController {
+    
+    func createCompositionalLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout {(section, environment) -> NSCollectionLayoutSection in
+            switch section {
+            case MainViewSections.playingNow.rawValue:
+                return self.createPlayingNowSection()
+            case MainViewSections.trendings.rawValue:
+                return self.createTrandingTodaySection()
+            default: fatalError()
+            }
+        }
+
+        return layout
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCellId", for: indexPath)
-        cell.backgroundColor = .green
+    private func createPlayingNowSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 8, trailing: 8)
         
-        return cell
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .absolute(86))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .groupPagingCentered
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
+        
+        return section
     }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        1
+        
+    private func createTrandingTodaySection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 8, trailing: 0)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(64))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        return NSCollectionLayoutSection(group: group)
     }
 }
 

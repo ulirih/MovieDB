@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TrendingModel: Codable {
+struct TrendingModel: Codable, Hashable {
     let adult: Bool
     let backdropPath: String
     let id: Int
