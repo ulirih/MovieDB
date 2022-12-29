@@ -8,11 +8,9 @@
 import Foundation
 
 class Service: ServiceProtocol {
-    private let apiKey = "70c8ec72951fd44fa58418ed870fb477"
-    private let baseUrl = "https://api.themoviedb.org/3"
     
     func fetchNowPlaying(completion: @escaping (Result<MovieListModel, NetworkErrorType>) -> Void) {
-        let urlString = "\(baseUrl)/movie/now_playing?api_key=\(apiKey)"
+        let urlString = "\(ApiConstant.baseUrl)/movie/now_playing?api_key=\(ApiConstant.apiKey)"
         
         baseRequest(for: urlString) { result in
             DispatchQueue.main.async { completion(result) }
@@ -20,7 +18,7 @@ class Service: ServiceProtocol {
     }
     
     func fetchTrending(page: Int, completion: @escaping (Result<TrendingListModel, NetworkErrorType>) -> Void) {
-        let urlString = "\(baseUrl)/trending/all/day?api_key=\(apiKey)&page=\(String(describing: page))"
+        let urlString = "\(ApiConstant.baseUrl)/trending/all/day?api_key=\(ApiConstant.apiKey)&page=\(String(describing: page))"
         
         baseRequest(for: urlString) { result in
             DispatchQueue.main.async { completion(result) }

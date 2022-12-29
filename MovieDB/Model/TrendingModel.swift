@@ -23,6 +23,22 @@ struct TrendingModel: Codable, Hashable {
     let voteCount: Int
     let name, originalName, firstAirDate: String?
     let originCountry: [String]?
+    
+    var posterUrl: String {
+        return ApiConstant.imageUrl + self.posterPath
+    }
+    
+    var backdropUrl: String {
+        return ApiConstant.imageUrl + self.backdropPath
+    }
+    
+    var dateDisplay: String {
+        return self.releaseDate ?? self.firstAirDate ?? ""
+    }
+    
+    var nameDisplay: String {
+        return self.title ?? self.name ?? ""
+    }
 
     enum CodingKeys: String, CodingKey {
         case adult

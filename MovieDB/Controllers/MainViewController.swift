@@ -64,6 +64,12 @@ class MainViewController: UIViewController {
         viewModel.isLoading
             .bind(to: loaderView.rx.isAnimating)
             .disposed(by: disposeBag)
+        
+        collectionView.rx.itemSelected
+            .subscribe(onNext: { path in
+                print(path)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func setupConstraints() {
@@ -95,6 +101,7 @@ class MainViewController: UIViewController {
     }
 }
 
+// MARK: CompositionalLayout
 extension MainViewController {
     
     func createDataSource() {
@@ -147,7 +154,7 @@ extension MainViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 8, trailing: 0)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(116))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(176))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
@@ -156,4 +163,3 @@ extension MainViewController {
         return section
     }
 }
-
