@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SDWebImage
 
 class TrendMovieViewCell: UICollectionViewCell {
     static let reusableId = "TrendMovieViewCell"
@@ -46,10 +47,7 @@ class TrendMovieViewCell: UICollectionViewCell {
     
     func configure(model: TrendingModel) {
         nameLabel.text = model.title ?? model.name
-        if model.title?.isEmpty ?? true {
-            print(model.id)
-        }
-        image.image = UIImage(contentsOfFile: model.posterPath)
+        image.sd_setImage(with: URL(string: "https://raw.githubusercontent.com/SDWebImage/SDWebImage/master/SDWebImage_logo.png"), completed: nil)
     }
     
     private let nameLabel: UILabel = {
