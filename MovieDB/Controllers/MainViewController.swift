@@ -40,19 +40,6 @@ class MainViewController: UIViewController {
         
         setupCollectionView()
         view.addSubview(collectionView)
-        dataSource = UICollectionViewDiffableDataSource<MainViewSections, AnyHashable>(collectionView: collectionView, cellProvider: { (collectionView, path, object) -> UICollectionViewCell? in
-            switch path.section {
-            case MainViewSections.trendings.rawValue:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCellId", for: path)
-                cell.backgroundColor = .green
-                return cell
-            case MainViewSections.playingNow.rawValue:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCellId", for: path)
-                cell.backgroundColor = .yellow
-                return cell
-            default: return nil
-            }
-        })
     }
     
     private func setupBind() {
@@ -85,7 +72,7 @@ class MainViewController: UIViewController {
             loaderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
             collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
         ])
@@ -102,12 +89,29 @@ class MainViewController: UIViewController {
     private func setupCollectionView() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "TrendingCellId")
+        collectionView.register(TrendMovieViewCell.self, forCellWithReuseIdentifier: TrendMovieViewCell.reusableId)
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MovieCellId")
+        createDataSource()
     }
 }
 
 extension MainViewController {
+    
+    func createDataSource() {
+        dataSource = UICollectionViewDiffableDataSource<MainViewSections, AnyHashable>(collectionView: collectionView, cellProvider: { (collectionView, path, object) -> UICollectionViewCell? in
+            switch path.section {
+            case MainViewSections.trendings.rawValue:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrendMovieViewCell.reusableId, for: path) as! TrendMovieViewCell
+                cell.configure(model: object as! TrendingModel)
+                return cell
+            case MainViewSections.playingNow.rawValue:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCellId", for: path)
+                cell.backgroundColor = .yellow
+                return cell
+            default: return nil
+            }
+        })
+    }
     
     func createCompositionalLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout {(section, environment) -> NSCollectionLayoutSection in
@@ -133,7 +137,7 @@ extension MainViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPagingCentered
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 16, trailing: 0)
         
         return section
     }
@@ -143,10 +147,13 @@ extension MainViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 8, trailing: 0)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(64))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(116))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
-        return NSCollectionLayoutSection(group: group)
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8)
+        
+        return section
     }
 }
 
