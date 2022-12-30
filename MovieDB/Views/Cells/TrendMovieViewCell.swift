@@ -61,6 +61,7 @@ class TrendMovieViewCell: UICollectionViewCell {
         name.translatesAutoresizingMaskIntoConstraints = false
         name.textColor = .label
         name.numberOfLines = 2
+        name.font = UIFont.getNunitoFont(type: .regular, size: 18)
         
         return name
     }()
@@ -68,6 +69,8 @@ class TrendMovieViewCell: UICollectionViewCell {
     private let dateLabel: UILabel = {
         let date = UILabel()
         date.translatesAutoresizingMaskIntoConstraints = false
+        date.textColor = .label.withAlphaComponent(0.7)
+        date.font = UIFont.getNunitoFont(type: .light, size: 15)
         
         return date
     }()
