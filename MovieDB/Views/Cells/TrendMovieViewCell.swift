@@ -23,9 +23,10 @@ class TrendMovieViewCell: UICollectionViewCell {
         blurView.layer.cornerRadius = 10
         blurView.clipsToBounds = true
         blurView.contentView.addSubview(nameLabel)
-        blurView.contentView.addSubview(image)
+        blurView.contentView.addSubview(imageView)
         blurView.contentView.addSubview(dateLabel)
         blurView.contentView.addSubview(markView)
+        blurView.contentView.addSubview(overviewLabel)
         
         contentView.addSubview(blurView)
     }
@@ -37,19 +38,23 @@ class TrendMovieViewCell: UICollectionViewCell {
             blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
             blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
             
-            image.heightAnchor.constraint(equalToConstant: 140),
-            image.widthAnchor.constraint(equalToConstant: 100),
-            image.leadingAnchor.constraint(equalTo: blurView.leadingAnchor, constant: 16),
-            image.topAnchor.constraint(equalTo: blurView.topAnchor, constant: 16),
+            imageView.heightAnchor.constraint(equalToConstant: 140),
+            imageView.widthAnchor.constraint(equalToConstant: 100),
+            imageView.leadingAnchor.constraint(equalTo: blurView.leadingAnchor, constant: 16),
+            imageView.topAnchor.constraint(equalTo: blurView.topAnchor, constant: 16),
             
-            nameLabel.topAnchor.constraint(equalTo: image.topAnchor),
-            nameLabel.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16),
-            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            nameLabel.topAnchor.constraint(equalTo: imageView.topAnchor),
+            nameLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16),
+            nameLabel.trailingAnchor.constraint(equalTo: blurView.trailingAnchor, constant: -16),
             
-            dateLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            dateLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
             dateLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             
-            markView.bottomAnchor.constraint(equalTo: image.bottomAnchor),
+            overviewLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor),
+            overviewLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            overviewLabel.trailingAnchor.constraint(equalTo: blurView.trailingAnchor, constant: -16),
+            
+            markView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
             markView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
         ])
     }
@@ -57,8 +62,9 @@ class TrendMovieViewCell: UICollectionViewCell {
     func configure(model: TrendingModel) {
         nameLabel.text = model.nameDisplay
         dateLabel.text = model.dateDisplay
-        image.sd_setImage(with: URL(string: model.posterUrl), completed: nil)
+        imageView.sd_setImage(with: URL(string: model.posterUrl), completed: nil)
         markView.setValue(value: model.voteAverage)
+        overviewLabel.text = model.overview
     }
     
     private let nameLabel: UILabel = {
@@ -75,12 +81,22 @@ class TrendMovieViewCell: UICollectionViewCell {
         let date = UILabel()
         date.translatesAutoresizingMaskIntoConstraints = false
         date.textColor = .label.withAlphaComponent(0.7)
-        date.font = UIFont.getNunitoFont(type: .light, size: 15)
+        date.font = UIFont.getNunitoFont(type: .light, size: 12)
         
         return date
     }()
     
-    private let image: UIImageView = {
+    private let overviewLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .label
+        label.font = UIFont.getNunitoFont(type: .regular, size: 14)
+        label.numberOfLines = 2
+        
+        return label
+    }()
+    
+    private let imageView: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.backgroundColor = .lightGray
