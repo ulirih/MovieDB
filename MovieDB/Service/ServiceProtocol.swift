@@ -21,5 +21,5 @@ enum NetworkErrorType: Error {
 struct ApiConstant {
     static let baseUrl = "https://api.themoviedb.org/3"
     static let apiKey = "70c8ec72951fd44fa58418ed870fb477"
-    static let imageUrl = "https://image.tmdb.org/t/p/w200/"
+    static let baseImageUrl = "https://image.tmdb.org/t/p/w200/"
 }

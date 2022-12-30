@@ -25,11 +25,11 @@ struct TrendingModel: Codable, Hashable {
     let originCountry: [String]?
     
     var posterUrl: String {
-        return ApiConstant.imageUrl + self.posterPath
+        return ApiConstant.baseImageUrl + self.posterPath
     }
     
     var backdropUrl: String {
-        return ApiConstant.imageUrl + self.backdropPath
+        return ApiConstant.baseImageUrl + self.backdropPath
     }
     
     var dateDisplay: String {

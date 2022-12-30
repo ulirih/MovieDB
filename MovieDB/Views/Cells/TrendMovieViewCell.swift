@@ -25,6 +25,7 @@ class TrendMovieViewCell: UICollectionViewCell {
         blurView.contentView.addSubview(nameLabel)
         blurView.contentView.addSubview(image)
         blurView.contentView.addSubview(dateLabel)
+        blurView.contentView.addSubview(markView)
         
         contentView.addSubview(blurView)
     }
@@ -46,7 +47,10 @@ class TrendMovieViewCell: UICollectionViewCell {
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
             dateLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
-            dateLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor)
+            dateLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            
+            markView.bottomAnchor.constraint(equalTo: image.bottomAnchor),
+            markView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
         ])
     }
     
@@ -54,6 +58,7 @@ class TrendMovieViewCell: UICollectionViewCell {
         nameLabel.text = model.nameDisplay
         dateLabel.text = model.dateDisplay
         image.sd_setImage(with: URL(string: model.posterUrl), completed: nil)
+        markView.setValue(value: model.voteAverage)
     }
     
     private let nameLabel: UILabel = {
@@ -81,6 +86,13 @@ class TrendMovieViewCell: UICollectionViewCell {
         image.backgroundColor = .lightGray
         
         return image
+    }()
+    
+    private let markView: MarkView = {
+        let mark = MarkView()
+        mark.translatesAutoresizingMaskIntoConstraints = false
+        
+        return mark
     }()
     
     private let blurView: UIVisualEffectView = {
