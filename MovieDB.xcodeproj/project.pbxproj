@@ -27,6 +27,7 @@
 		55AECFCF295F073700648018 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFCE295F073700648018 /* UIFontExtensions.swift */; };
 		55AECFD1295F09C500648018 /* MarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFD0295F09C500648018 /* MarkView.swift */; };
 		55AECFD3296D7FDB00648018 /* NowPlayingViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFD2296D7FDB00648018 /* NowPlayingViewCell.swift */; };
+		55AECFD5296DB36F00648018 /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFD4296DB36F00648018 /* HeaderCell.swift */; };
 		55E980972955B7C900C4FF66 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E980962955B7C900C4FF66 /* Service.swift */; };
 		55E9809B2955C86E00C4FF66 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E9809A2955C86E00C4FF66 /* MainViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -54,6 +55,7 @@
 		55AECFCE295F073700648018 /* UIFontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
 		55AECFD0295F09C500648018 /* MarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkView.swift; sourceTree = "<group>"; };
 		55AECFD2296D7FDB00648018 /* NowPlayingViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingViewCell.swift; sourceTree = "<group>"; };
+		55AECFD4296DB36F00648018 /* HeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCell.swift; sourceTree = "<group>"; };
 		55E980962955B7C900C4FF66 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		55E9809A2955C86E00C4FF66 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		9B0C09D3F0968407C82C2752 /* Pods_MovieDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -167,6 +169,7 @@
 			children = (
 				55AECFC2295DB70A00648018 /* TrendMovieViewCell.swift */,
 				55AECFD2296D7FDB00648018 /* NowPlayingViewCell.swift */,
+				55AECFD4296DB36F00648018 /* HeaderCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				55A5D5A3295321A70049533D /* AppDelegate.swift in Sources */,
 				55AECFCF295F073700648018 /* UIFontExtensions.swift in Sources */,
 				55A5D5BE2954EF8A0049533D /* TrendingListModel.swift in Sources */,
+				55AECFD5296DB36F00648018 /* HeaderCell.swift in Sources */,
 				55A5D5C02954F0F10049533D /* TrendingModel.swift in Sources */,
 				55AECFC0295C4F5C00648018 /* MainViewSections.swift in Sources */,
 				55A5D5C42954F48D0049533D /* MovieModel.swift in Sources */,

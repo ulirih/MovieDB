@@ -66,8 +66,8 @@ class MainViewController: UIViewController {
             .disposed(by: disposeBag)
         
         collectionView.rx.itemSelected
-            .subscribe(onNext: { path in
-                let model = self.dataSource.itemIdentifier(for: path)
+            .subscribe(onNext: { [weak self] path in
+                let model = self?.dataSource.itemIdentifier(for: path)
                 print(model)
             })
             .disposed(by: disposeBag)
@@ -98,6 +98,7 @@ class MainViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(TrendMovieViewCell.self, forCellWithReuseIdentifier: TrendMovieViewCell.reusableId)
         collectionView.register(NowPlayingViewCell.self, forCellWithReuseIdentifier: NowPlayingViewCell.reusableId)
+        collectionView.register(HeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCell.reusableId)
         createDataSource()
     }
 }
@@ -119,6 +120,12 @@ extension MainViewController {
             default: return nil
             }
         })
+        
+        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderCell.reusableId, for: indexPath) as! HeaderCell
+            cell.textLabel.text = MainViewSections(rawValue: indexPath.section)?.title.uppercased()
+            return cell
+        }
     }
     
     func createCompositionalLayout() -> UICollectionViewLayout {
@@ -138,14 +145,15 @@ extension MainViewController {
     private func createPlayingNowSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 6, bottom: 8, trailing: 6)
+        item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 6, bottom: 0, trailing: 6)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .absolute(180))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPagingCentered
-        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 16, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
+        section.boundarySupplementaryItems = [headerSection()]
         
         return section
     }
@@ -153,14 +161,25 @@ extension MainViewController {
     private func createTrandingTodaySection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 8, trailing: 0)
+        item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 8, bottom: 8, trailing: 8)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(176))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 8, trailing: 8)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0)
+        section.boundarySupplementaryItems = [headerSection()]
         
         return section
+    }
+    
+    private func headerSection() -> NSCollectionLayoutBoundarySupplementaryItem {
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(28))
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        return sectionHeader
     }
 }
