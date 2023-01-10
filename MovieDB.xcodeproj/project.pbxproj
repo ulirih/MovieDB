@@ -26,6 +26,7 @@
 		55AECFCC295F051E00648018 /* NunitoSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55AECFC9295F051E00648018 /* NunitoSans-ExtraLight.ttf */; };
 		55AECFCF295F073700648018 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFCE295F073700648018 /* UIFontExtensions.swift */; };
 		55AECFD1295F09C500648018 /* MarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFD0295F09C500648018 /* MarkView.swift */; };
+		55AECFD3296D7FDB00648018 /* NowPlayingViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFD2296D7FDB00648018 /* NowPlayingViewCell.swift */; };
 		55E980972955B7C900C4FF66 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E980962955B7C900C4FF66 /* Service.swift */; };
 		55E9809B2955C86E00C4FF66 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E9809A2955C86E00C4FF66 /* MainViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -52,6 +53,7 @@
 		55AECFC9295F051E00648018 /* NunitoSans-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-ExtraLight.ttf"; sourceTree = "<group>"; };
 		55AECFCE295F073700648018 /* UIFontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
 		55AECFD0295F09C500648018 /* MarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkView.swift; sourceTree = "<group>"; };
+		55AECFD2296D7FDB00648018 /* NowPlayingViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingViewCell.swift; sourceTree = "<group>"; };
 		55E980962955B7C900C4FF66 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		55E9809A2955C86E00C4FF66 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		9B0C09D3F0968407C82C2752 /* Pods_MovieDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -164,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				55AECFC2295DB70A00648018 /* TrendMovieViewCell.swift */,
+				55AECFD2296D7FDB00648018 /* NowPlayingViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -344,6 +347,7 @@
 				55E980972955B7C900C4FF66 /* Service.swift in Sources */,
 				55A5D5C22954F3B10049533D /* MovieListModel.swift in Sources */,
 				55A5D5A5295321A70049533D /* SceneDelegate.swift in Sources */,
+				55AECFD3296D7FDB00648018 /* NowPlayingViewCell.swift in Sources */,
 				55A5D5BB2954E5F90049533D /* ServiceProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -67,7 +67,8 @@ class MainViewController: UIViewController {
         
         collectionView.rx.itemSelected
             .subscribe(onNext: { path in
-                print(path)
+                let model = self.dataSource.itemIdentifier(for: path)
+                print(model)
             })
             .disposed(by: disposeBag)
     }
@@ -96,7 +97,7 @@ class MainViewController: UIViewController {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(TrendMovieViewCell.self, forCellWithReuseIdentifier: TrendMovieViewCell.reusableId)
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MovieCellId")
+        collectionView.register(NowPlayingViewCell.self, forCellWithReuseIdentifier: NowPlayingViewCell.reusableId)
         createDataSource()
     }
 }
@@ -112,8 +113,8 @@ extension MainViewController {
                 cell.configure(model: object as! TrendingModel)
                 return cell
             case MainViewSections.playingNow.rawValue:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCellId", for: path)
-                cell.backgroundColor = .yellow
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NowPlayingViewCell.reusableId, for: path) as! NowPlayingViewCell
+                cell.configure(with: object as! MovieModel)
                 return cell
             default: return nil
             }
@@ -137,9 +138,9 @@ extension MainViewController {
     private func createPlayingNowSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 8, trailing: 8)
+        item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 6, bottom: 8, trailing: 6)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .absolute(86))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .absolute(180))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)

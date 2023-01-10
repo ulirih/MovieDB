@@ -10,12 +10,10 @@ import UIKit
 class MarkView: UIView {
     
     var text: UILabel = UILabel()
-    private var value: Double = 0
-    
-    func setValue(value: Double) {
-        self.value = value
-        text.text = numberFormatter.string(from: NSNumber(value: value))
-        backgroundColor = self.viewBgColor
+    var value: Double = 0 {
+        didSet {
+            setValue()
+        }
     }
     
     override init(frame: CGRect) {
@@ -44,10 +42,16 @@ class MarkView: UIView {
         ])
     }
     
+    private func setValue() {
+        text.text = numberFormatter.string(from: NSNumber(value: value))
+        backgroundColor = self.viewBgColor
+    }
+    
     private let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
+        formatter.maximumFractionDigits = 1
+        formatter.minimumFractionDigits = 1
         formatter.decimalSeparator = "."
         
         return formatter
@@ -56,9 +60,9 @@ class MarkView: UIView {
     private var viewBgColor: UIColor {
         get {
             switch value {
-            case 0..<4.5:
+            case 0..<5:
                 return .systemRed
-            case 4.5..<7.0:
+            case 5..<7:
                 return .systemYellow
             case 7...10:
                 return .systemGreen

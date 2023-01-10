@@ -19,7 +19,15 @@ class TrendMovieViewCell: UICollectionViewCell {
         setupConstraints()
     }
     
-    func setupViews() {
+    func configure(model: TrendingModel) {
+        nameLabel.text = model.nameDisplay
+        dateLabel.text = model.dateDisplay
+        imageView.sd_setImage(with: URL(string: model.posterUrl), completed: nil)
+        markView.value = model.voteAverage
+        overviewLabel.text = model.overview
+    }
+    
+    private func setupViews() {
         blurView.layer.cornerRadius = 10
         blurView.clipsToBounds = true
         blurView.contentView.addSubview(nameLabel)
@@ -31,7 +39,7 @@ class TrendMovieViewCell: UICollectionViewCell {
         contentView.addSubview(blurView)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             blurView.topAnchor.constraint(equalTo: topAnchor),
             blurView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -57,14 +65,6 @@ class TrendMovieViewCell: UICollectionViewCell {
             markView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
             markView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
         ])
-    }
-    
-    func configure(model: TrendingModel) {
-        nameLabel.text = model.nameDisplay
-        dateLabel.text = model.dateDisplay
-        imageView.sd_setImage(with: URL(string: model.posterUrl), completed: nil)
-        markView.setValue(value: model.voteAverage)
-        overviewLabel.text = model.overview
     }
     
     private let nameLabel: UILabel = {

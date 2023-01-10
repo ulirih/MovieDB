@@ -19,6 +19,10 @@ struct MovieModel: Codable, Hashable {
     let voteCount: Int
     let video: Bool
     let voteAverage: Double
+    
+    var backdropUrl: String {
+        return ApiConstant.baseImageUrl + self.backdropPath
+    }
 
     enum CodingKeys: String, CodingKey {
         case posterPath = "poster_path"
