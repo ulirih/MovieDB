@@ -27,12 +27,12 @@ class MainViewController: UIViewController {
         setupView()
         setupBind()
         setupConstraints()
+        
+        viewModel.fetchData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        viewModel.fetchData()
     }
     
     private func setupView() {
@@ -68,7 +68,7 @@ class MainViewController: UIViewController {
         collectionView.rx.itemSelected
             .subscribe(onNext: { [weak self] path in
                 let model = self?.dataSource.itemIdentifier(for: path)
-                print(model)
+                self?.viewModel.didTapMovie(movieId: 0)
             })
             .disposed(by: disposeBag)
     }
@@ -152,7 +152,7 @@ extension MainViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPagingCentered
-        section.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 16, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
         section.boundarySupplementaryItems = [headerSection()]
         
         return section

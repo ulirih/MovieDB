@@ -13,4 +13,5 @@ protocol CoordinatorProtocol: AnyObject {
     
     func start()
     func goToMain()
+    func goToDetails(for movieId: Int)
 }

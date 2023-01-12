@@ -12,7 +12,9 @@ protocol MainViewModelProtocol: AnyObject {
     var isLoading: PublishSubject<Bool> { get }
     var nowPlaying: PublishSubject<[MovieModel]> { get }
     var trendings: PublishSubject<[TrendingModel]> { get }
+    
     func fetchData() -> Void
+    func didTapMovie(movieId: Int) -> Void
 }
 
 class MainViewModel: MainViewModelProtocol {
@@ -55,5 +57,9 @@ class MainViewModel: MainViewModelProtocol {
             }
             group.leave()
         }
+    }
+    
+    func didTapMovie(movieId: Int) {
+        coordinator?.goToDetails(for: movieId)
     }
 }
