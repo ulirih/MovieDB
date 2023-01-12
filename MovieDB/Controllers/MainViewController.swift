@@ -12,11 +12,11 @@ import RxCocoa
 class MainViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
-    var viewModel = MainViewModel(service: Service())
+    var viewModel: MainViewModelProtocol!
     
-    var collectionView: UICollectionView!
-    var snapshot: NSDiffableDataSourceSnapshot<MainViewSections, AnyHashable> = NSDiffableDataSourceSnapshot()
-    var dataSource: UICollectionViewDiffableDataSource<MainViewSections, AnyHashable>!
+    private var collectionView: UICollectionView!
+    private var snapshot: NSDiffableDataSourceSnapshot<MainViewSections, AnyHashable> = NSDiffableDataSourceSnapshot()
+    private var dataSource: UICollectionViewDiffableDataSource<MainViewSections, AnyHashable>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -152,7 +152,7 @@ extension MainViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPagingCentered
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 16, trailing: 0)
         section.boundarySupplementaryItems = [headerSection()]
         
         return section

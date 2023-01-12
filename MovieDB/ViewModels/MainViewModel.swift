@@ -17,13 +17,15 @@ protocol MainViewModelProtocol: AnyObject {
 
 class MainViewModel: MainViewModelProtocol {
     private let service: ServiceProtocol
+    private weak var coordinator: CoordinatorProtocol?
     
     var isLoading: PublishSubject<Bool> = PublishSubject()
     var nowPlaying: PublishSubject<[MovieModel]> = PublishSubject()
     var trendings: PublishSubject<[TrendingModel]> = PublishSubject()
     
-    init(service: ServiceProtocol) {
+    init(service: ServiceProtocol, coordinator: CoordinatorProtocol) {
         self.service = service
+        self.coordinator = coordinator
     }
     
     func fetchData() {
