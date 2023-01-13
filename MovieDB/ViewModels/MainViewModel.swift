@@ -10,7 +10,7 @@ import RxSwift
 
 protocol MainViewModelProtocol: AnyObject {
     var isLoading: PublishSubject<Bool> { get }
-    var nowPlaying: PublishSubject<[MovieModel]> { get }
+    var nowPlaying: PublishSubject<[PlayNowModel]> { get }
     var trendings: PublishSubject<[TrendingModel]> { get }
     
     func fetchData() -> Void
@@ -22,7 +22,7 @@ class MainViewModel: MainViewModelProtocol {
     private weak var coordinator: CoordinatorProtocol?
     
     var isLoading: PublishSubject<Bool> = PublishSubject()
-    var nowPlaying: PublishSubject<[MovieModel]> = PublishSubject()
+    var nowPlaying: PublishSubject<[PlayNowModel]> = PublishSubject()
     var trendings: PublishSubject<[TrendingModel]> = PublishSubject()
     
     init(service: ServiceProtocol, coordinator: CoordinatorProtocol) {

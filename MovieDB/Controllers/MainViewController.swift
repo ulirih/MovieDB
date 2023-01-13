@@ -11,12 +11,10 @@ import RxCocoa
 
 class MainViewController: UIViewController {
     private let disposeBag = DisposeBag()
+    private var collectionView: UICollectionView!
+    private var dataSource: UICollectionViewDiffableDataSource<MainViewSections, AnyHashable>!
     
     var viewModel: MainViewModelProtocol!
-    
-    private var collectionView: UICollectionView!
-    private var snapshot: NSDiffableDataSourceSnapshot<MainViewSections, AnyHashable> = NSDiffableDataSourceSnapshot()
-    private var dataSource: UICollectionViewDiffableDataSource<MainViewSections, AnyHashable>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,10 +29,6 @@ class MainViewController: UIViewController {
         viewModel.fetchData()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
     private func setupView() {
         view.addSubview(loaderView)
         
@@ -44,20 +38,22 @@ class MainViewController: UIViewController {
     
     private func setupBind() {
         viewModel.nowPlaying
-            .subscribe(onNext: { [weak self] movies in
-                self?.snapshot.appendSections([.playingNow])
-                self?.snapshot.appendItems(movies, toSection: .playingNow)
-                self?.dataSource.apply(self!.snapshot)
-                print(movies.count)
+            .subscribe(onNext: { [weak self] playingNow in
+                guard let self = self else { return }
+                var snapshot = self.dataSource.snapshot()
+                snapshot.appendSections([.playingNow])
+                snapshot.appendItems(playingNow, toSection: .playingNow)
+                self.dataSource.apply(snapshot)
             })
             .disposed(by: disposeBag)
         
         viewModel.trendings
-            .subscribe(onNext: { [weak self] movies in
-                self?.snapshot.appendSections([.trendings])
-                self?.snapshot.appendItems(movies, toSection: .trendings)
-                self?.dataSource.apply(self!.snapshot)
-                print(movies.count)
+            .subscribe(onNext: { [weak self] trendings in
+                guard let self = self else { return }
+                var snapshot = self.dataSource.snapshot()
+                snapshot.appendSections([.trendings])
+                snapshot.appendItems(trendings, toSection: .trendings)
+                self.dataSource.apply(snapshot)
             })
             .disposed(by: disposeBag)
         
@@ -66,9 +62,15 @@ class MainViewController: UIViewController {
             .disposed(by: disposeBag)
         
         collectionView.rx.itemSelected
-            .subscribe(onNext: { [weak self] path in
-                let model = self?.dataSource.itemIdentifier(for: path)
-                self?.viewModel.didTapMovie(movieId: 0)
+            .subscribe(onNext: { [weak self] indexPath in
+                let object = self?.dataSource.itemIdentifier(for: indexPath)
+                switch indexPath.section {
+                case MainViewSections.playingNow.rawValue:
+                    self?.viewModel.didTapMovie(movieId: (object as! PlayNowModel).id)
+                case MainViewSections.trendings.rawValue:
+                    self?.viewModel.didTapMovie(movieId: (object as! TrendingModel).id)
+                default: return
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -115,7 +117,7 @@ extension MainViewController {
                 return cell
             case MainViewSections.playingNow.rawValue:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NowPlayingViewCell.reusableId, for: path) as! NowPlayingViewCell
-                cell.configure(with: object as! MovieModel)
+                cell.configure(with: object as! PlayNowModel)
                 return cell
             default: return nil
             }

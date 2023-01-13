@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieModel: Codable, Hashable {
+struct PlayNowModel: Codable, Hashable {
     let posterPath: String
     let adult: Bool
     let overview, releaseDate: String

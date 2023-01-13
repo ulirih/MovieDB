@@ -8,12 +8,16 @@
 import UIKit
 
 class MovieDetailController: UIViewController {
+    
+    var movieId: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .secondarySystemBackground
         title = "Details"
+        
+        print(movieId ?? -1)
     }
 
 }

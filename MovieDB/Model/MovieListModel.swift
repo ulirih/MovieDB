@@ -9,7 +9,7 @@ import Foundation
 
 struct MovieListModel: Codable {
     let page: Int
-    let results: [MovieModel]
+    let results: [PlayNowModel]
     let totalResults, totalPages: Int
 
     enum CodingKeys: String, CodingKey {

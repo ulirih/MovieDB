@@ -29,6 +29,7 @@ class AppCoordinator: CoordinatorProtocol {
     
     func goToDetails(for movieId: Int) {
         let detailVC = MovieDetailController()
+        detailVC.movieId = movieId
         navigationController.pushViewController(detailVC, animated: true)
     }
 }

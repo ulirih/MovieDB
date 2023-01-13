@@ -19,7 +19,7 @@ class NowPlayingViewCell: UICollectionViewCell {
         setupConstraints()
     }
     
-    func configure(with model: MovieModel) {
+    func configure(with model: PlayNowModel) {
         backgroundImage.sd_setImage(with: URL(string: model.backdropUrl))
         markView.value = model.voteAverage
         nameLabel.text = model.title
