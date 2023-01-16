@@ -10,13 +10,13 @@ import RxSwift
 
 class Service: ServiceProtocol {
     
-    func fetchMovieDetail(movieId: Int) -> Single<String> {
+    func fetchMovieDetail(movieId: Int) -> Single<MovieDetailModel> {
         let urlString = "\(ApiConstant.baseUrl)/movie/\(movieId)?api_key=\(ApiConstant.apiKey)"
         return baseRequest(for: urlString)
     }
     
     
-    func fetchNowPlaying() -> Single<MovieListModel> {
+    func fetchNowPlaying() -> Single<PlayNowListModel> {
         let urlString = "\(ApiConstant.baseUrl)/movie/now_playing?api_key=\(ApiConstant.apiKey)"
         return baseRequest(for: urlString)
     }
@@ -43,7 +43,9 @@ class Service: ServiceProtocol {
                 do {
                     let result = try JSONDecoder().decode(T.self, from: data)
                     observer(.success(result))
-                } catch {
+                } catch let error {
+                    print(error.localizedDescription)
+                    print(urlString)
                     observer(.failure(NetworkErrorType.parseError))
                 }
             }

@@ -9,9 +9,9 @@ import Foundation
 import RxSwift
 
 protocol ServiceProtocol: AnyObject {
-    func fetchNowPlaying() -> Single<MovieListModel>
+    func fetchNowPlaying() -> Single<PlayNowListModel>
     func fetchTrending(page: Int) -> Single<TrendingListModel>
-    func fetchMovieDetail(movieId: Int) -> Single<String>
+    func fetchMovieDetail(movieId: Int) -> Single<MovieDetailModel>
 }
 
 enum NetworkErrorType: Error {
