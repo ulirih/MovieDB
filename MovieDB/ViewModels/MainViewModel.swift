@@ -18,6 +18,7 @@ protocol MainViewModelProtocol: AnyObject {
 }
 
 class MainViewModel: MainViewModelProtocol {
+    private let disposeBag = DisposeBag()
     private let service: ServiceProtocol
     private weak var coordinator: CoordinatorProtocol?
     
@@ -32,31 +33,21 @@ class MainViewModel: MainViewModelProtocol {
     
     func fetchData() {
         isLoading.onNext(true)
+
+        service.fetchNowPlaying()
+            .subscribe { movies in
+                self.nowPlaying.onNext(movies.results)
+            } onFailure: { error in
+                self.nowPlaying.onNext([])
+            }.disposed(by: disposeBag)
         
-        let group = DispatchGroup()
-        group.enter()
-        service.fetchNowPlaying { [weak self] result in
-            switch result {
-            case .success(let movies):
-                self?.nowPlaying.onNext(movies.results)
-            case .failure(let error):
+        service.fetchTrending(page: 1)
+            .subscribe { listModel in
+                self.isLoading.onNext(false)
+                self.trendings.onNext(listModel.results)
+            } onFailure: { error in
                 print(error.localizedDescription)
-            }
-            group.leave()
-        }
-        
-        group.enter()
-        service.fetchTrending(page: 1) { [weak self] result in
-            switch result {
-            case .success(let trendings):
-                self?.isLoading.onNext(false)
-                self?.trendings.onNext(trendings.results)
-                
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-            group.leave()
-        }
+            }.disposed(by: disposeBag)
     }
     
     func didTapMovie(movieId: Int) {

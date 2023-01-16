@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import RxSwift
 
 class MovieDetailController: UIViewController {
+    private let disposeBag = DisposeBag()
     
     var movieId: Int?
 
@@ -17,7 +19,13 @@ class MovieDetailController: UIViewController {
         view.backgroundColor = .secondarySystemBackground
         title = "Details"
         
-        print(movieId ?? -1)
+        let service = Service()
+        service.fetchMovieDetail(movieId: movieId!)
+            .subscribe { value in
+                print(value)
+            } onFailure: { error in
+                print(error.localizedDescription)
+            }.disposed(by: disposeBag)
     }
 
 }

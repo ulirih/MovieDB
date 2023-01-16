@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol ServiceProtocol: AnyObject {
-    func fetchNowPlaying(completion: @escaping (Result<MovieListModel, NetworkErrorType>) -> Void)
-    func fetchTrending(page: Int, completion: @escaping (Result<TrendingListModel, NetworkErrorType>) -> Void)
+    func fetchNowPlaying() -> Single<MovieListModel>
+    func fetchTrending(page: Int) -> Single<TrendingListModel>
+    func fetchMovieDetail(movieId: Int) -> Single<String>
 }
 
 enum NetworkErrorType: Error {

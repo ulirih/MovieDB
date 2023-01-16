@@ -30,10 +30,9 @@ class MainViewController: UIViewController {
     }
     
     private func setupView() {
-        view.addSubview(loaderView)
-        
         setupCollectionView()
         view.addSubview(collectionView)
+        view.addSubview(loaderView)
     }
     
     private func setupBind() {
