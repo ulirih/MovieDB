@@ -9,7 +9,7 @@ import Foundation
 
 struct MovieDetailModel: Codable {
     let adult: Bool
-    let backdropPath: String
+    let backdropPath: String?
     let belongsToCollection: BelongsToCollection?
     let budget: Int
     let genres: [Genre]
@@ -26,7 +26,12 @@ struct MovieDetailModel: Codable {
     let voteCount: Int
     
     var backdropUrl: String {
-        return ApiConstant.baseImageUrl + self.backdropPath
+        return ApiConstant.baseImageUrl + (self.backdropPath ?? self.posterPath)
+    }
+    
+    var categoriesString: String {
+        let names = genres.map { $0.name }
+        return names.joined(separator: ", ")
     }
 
     enum CodingKeys: String, CodingKey {
