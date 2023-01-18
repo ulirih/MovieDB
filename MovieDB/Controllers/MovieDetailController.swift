@@ -137,24 +137,11 @@ class MovieDetailController: UIViewController {
         return loader
     }()
     
-    private let errorView: UIView = {
-        let view = UIView()
+    private let errorView: ErrorView = {
+        let view = ErrorView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        
-        let image = UIImageView(image: UIImage(named: "exclamationmark.triangle.fill"))
-        image.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(image)
-        
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Something went wrong"
-        label.textColor = .label
-        label.font = UIFont.getNunitoFont(type: .bold)
-        view.addSubview(label)
-        label.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 16).isActive = true
-        label.centerXAnchor.constraint(equalTo: image.centerXAnchor).isActive = true
-        
         view.alpha = 0
+        
         return view
     }()
 
