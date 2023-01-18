@@ -11,26 +11,31 @@ import RxSwift
 protocol MovieDetailViewModelProtocol: AnyObject {
     var isLoading: PublishSubject<Bool> { get }
     var detail: PublishSubject<MovieDetailModel> { get }
+    var cast: PublishSubject<[CastModel]> { get }
     
-    func fetchDetail(id: Int) -> Void
+    func fetchDetail() -> Void
+    func fetchCasts() -> Void
 }
 
 class MovieDetailViewModel: MovieDetailViewModelProtocol {
     private var disposeBag = DisposeBag()
     private var service: ServiceProtocol
     private var coordinator: CoordinatorProtocol
-    
+    private var movieId: Int
+
     var isLoading: PublishSubject<Bool> = PublishSubject()
     var detail: PublishSubject<MovieDetailModel> = PublishSubject()
+    var cast: PublishSubject<[CastModel]> = PublishSubject()
     
-    init(service: ServiceProtocol, coordinator: CoordinatorProtocol) {
+    init(movieId: Int, service: ServiceProtocol, coordinator: CoordinatorProtocol) {
         self.service = service
         self.coordinator = coordinator
+        self.movieId = movieId
     }
     
-    func fetchDetail(id: Int) {
+    func fetchDetail() {
         isLoading.onNext(true)
-        service.fetchMovieDetail(movieId: id)
+        service.fetchMovieDetail(movieId: movieId)
             .observe(on: MainScheduler.instance)
             .subscribe { [weak self] movie in
                 self?.isLoading.onNext(false)
@@ -41,5 +46,12 @@ class MovieDetailViewModel: MovieDetailViewModelProtocol {
             }.disposed(by: disposeBag)
     }
     
-    
+    func fetchCasts() {
+        service.fetchMovieCast(movieId: movieId)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onSuccess: { [weak self] list in
+                let cast = list.cast.filter { $0.knownForDepartment == .acting }.prefix(12)
+                self?.cast.onNext(Array(cast))
+            }).disposed(by: disposeBag)
+    }
 }

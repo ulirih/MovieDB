@@ -10,8 +10,8 @@ import RxSwift
 
 class MovieDetailController: UIViewController {
     private let disposeBag = DisposeBag()
+    private var casts: [CastModel] = []
     
-    var movieId: Int!
     var viewModel: MovieDetailViewModelProtocol!
 
     override func viewDidLoad() {
@@ -24,7 +24,8 @@ class MovieDetailController: UIViewController {
         setupConstrains()
         setupBindings()
         
-        viewModel.fetchDetail(id: movieId)
+        viewModel.fetchDetail()
+        viewModel.fetchCasts()
     }
     
     private func setupBindings() {
@@ -39,6 +40,13 @@ class MovieDetailController: UIViewController {
             }, onError: { [weak self] error in
                 self?.errorView.alpha = 1
             }).disposed(by: disposeBag)
+        
+        viewModel.cast
+            .subscribe(onNext: { casts in
+                self.casts = casts
+                self.collectionView.reloadData()
+            }).disposed(by: disposeBag)
+
 
         viewModel.isLoading
             .bind(to: loaderView.rx.isAnimating)
@@ -53,6 +61,9 @@ class MovieDetailController: UIViewController {
         view.addSubview(genreLabel)
         view.addSubview(loaderView)
         view.addSubview(errorView)
+        view.addSubview(collectionView)
+        
+        collectionView.dataSource = self
     }
     
     private func setupConstrains() {
@@ -82,6 +93,10 @@ class MovieDetailController: UIViewController {
             
             errorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             errorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            collectionView.topAnchor.constraint(equalTo: genreLabel.bottomAnchor, constant: 22),
+            collectionView.heightAnchor.constraint(equalToConstant: 150),
+            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
     }
     
@@ -144,5 +159,35 @@ class MovieDetailController: UIViewController {
         
         return view
     }()
+    
+    private let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 0
+        layout.itemSize = CGSize(width: 100, height: 150)
+        
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.register(CastViewCell.self, forCellWithReuseIdentifier: CastViewCell.reusableId)
+        collection.backgroundColor = .clear
+        collection.showsHorizontalScrollIndicator = false
+        
+        return collection
+    }()
 
+}
+
+// MARK: Collection DS
+extension MovieDetailController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastViewCell.reusableId, for: indexPath) as! CastViewCell
+        cell.configure(model: casts[indexPath.row])
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print(casts.count)
+        return casts.count
+    }
 }

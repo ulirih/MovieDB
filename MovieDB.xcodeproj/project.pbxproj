@@ -33,6 +33,8 @@
 		55AECFDE2975C4F000648018 /* MovieDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFDD2975C4F000648018 /* MovieDetailModel.swift */; };
 		55AECFE029770F5100648018 /* MovieDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFDF29770F5100648018 /* MovieDetailViewModel.swift */; };
 		55AECFE229782E8C00648018 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFE129782E8C00648018 /* ErrorView.swift */; };
+		55AECFE42978329F00648018 /* MovieCastModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFE32978329F00648018 /* MovieCastModel.swift */; };
+		55AECFE629783D4000648018 /* CastViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFE529783D4000648018 /* CastViewCell.swift */; };
 		55E980972955B7C900C4FF66 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E980962955B7C900C4FF66 /* Service.swift */; };
 		55E9809B2955C86E00C4FF66 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E9809A2955C86E00C4FF66 /* MainViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -66,6 +68,8 @@
 		55AECFDD2975C4F000648018 /* MovieDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailModel.swift; sourceTree = "<group>"; };
 		55AECFDF29770F5100648018 /* MovieDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailViewModel.swift; sourceTree = "<group>"; };
 		55AECFE129782E8C00648018 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		55AECFE32978329F00648018 /* MovieCastModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCastModel.swift; sourceTree = "<group>"; };
+		55AECFE529783D4000648018 /* CastViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastViewCell.swift; sourceTree = "<group>"; };
 		55E980962955B7C900C4FF66 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		55E9809A2955C86E00C4FF66 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		9B0C09D3F0968407C82C2752 /* Pods_MovieDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,6 +176,7 @@
 				55A5D5C12954F3B10049533D /* PlayNowListModel.swift */,
 				55A5D5C32954F48D0049533D /* PlayNowModel.swift */,
 				55AECFDD2975C4F000648018 /* MovieDetailModel.swift */,
+				55AECFE32978329F00648018 /* MovieCastModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -182,6 +187,7 @@
 				55AECFC2295DB70A00648018 /* TrendMovieViewCell.swift */,
 				55AECFD2296D7FDB00648018 /* NowPlayingViewCell.swift */,
 				55AECFD4296DB36F00648018 /* HeaderCell.swift */,
+				55AECFE529783D4000648018 /* CastViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -367,12 +373,14 @@
 				55AECFE229782E8C00648018 /* ErrorView.swift in Sources */,
 				55AECFDC29707C3600648018 /* MovieDetailController.swift in Sources */,
 				55A5D5BE2954EF8A0049533D /* TrendingListModel.swift in Sources */,
+				55AECFE42978329F00648018 /* MovieCastModel.swift in Sources */,
 				55AECFD5296DB36F00648018 /* HeaderCell.swift in Sources */,
 				55A5D5C02954F0F10049533D /* TrendingModel.swift in Sources */,
 				55AECFDA2970705300648018 /* AppCoordinator.swift in Sources */,
 				55AECFC0295C4F5C00648018 /* MainViewSections.swift in Sources */,
 				55A5D5C42954F48D0049533D /* PlayNowModel.swift in Sources */,
 				55AECFD1295F09C500648018 /* MarkView.swift in Sources */,
+				55AECFE629783D4000648018 /* CastViewCell.swift in Sources */,
 				55E9809B2955C86E00C4FF66 /* MainViewModel.swift in Sources */,
 				55AECFC3295DB70A00648018 /* TrendMovieViewCell.swift in Sources */,
 				55AECFD82970702400648018 /* CoordinatorProtocol.swift in Sources */,

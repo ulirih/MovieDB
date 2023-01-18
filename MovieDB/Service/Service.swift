@@ -26,6 +26,11 @@ class Service: ServiceProtocol {
         return baseRequest(for: urlString)
     }
     
+    func fetchMovieCast(movieId: Int) -> Single<MovieCastListModel> {
+        let urlString = "\(ApiConstant.baseUrl)/movie/\(movieId)/credits?api_key=\(ApiConstant.apiKey)"
+        return baseRequest(for: urlString)
+    }
+    
     private func baseRequest<T: Decodable>(for urlString: String) -> Single<T> {
         return Single<T>.create { observer in
             guard let url = URL(string: urlString) else {
