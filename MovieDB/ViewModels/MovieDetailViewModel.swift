@@ -15,6 +15,7 @@ protocol MovieDetailViewModelProtocol: AnyObject {
     
     func fetchDetail() -> Void
     func fetchCasts() -> Void
+    func didTapPerson(person model: CastModel) -> Void
 }
 
 class MovieDetailViewModel: MovieDetailViewModelProtocol {
@@ -53,5 +54,9 @@ class MovieDetailViewModel: MovieDetailViewModelProtocol {
                 let cast = list.cast.filter { $0.knownForDepartment == .acting }.prefix(12)
                 self?.cast.onNext(Array(cast))
             }).disposed(by: disposeBag)
+    }
+    
+    func didTapPerson(person model: CastModel) {
+        print(model)
     }
 }

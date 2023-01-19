@@ -42,15 +42,21 @@ class MovieDetailController: UIViewController {
             }).disposed(by: disposeBag)
         
         viewModel.cast
-            .subscribe(onNext: { casts in
-                self.casts = casts
-                self.collectionView.reloadData()
-            }).disposed(by: disposeBag)
+            .bind(to: collectionView.rx.items(cellIdentifier: CastViewCell.reusableId, cellType: CastViewCell.self)) {
+                indexPath, model, cell in
+                cell.configure(model: model)
+            }.disposed(by: disposeBag)
 
 
         viewModel.isLoading
             .bind(to: loaderView.rx.isAnimating)
             .disposed(by: disposeBag)
+        
+        collectionView.rx.modelSelected(CastModel.self)
+            .subscribe(onNext: { [weak self] cast in
+                self?.viewModel.didTapPerson(person: cast)
+            }).disposed(by: disposeBag)
+
     }
     
     private func setupViews() {
@@ -62,8 +68,6 @@ class MovieDetailController: UIViewController {
         view.addSubview(loaderView)
         view.addSubview(errorView)
         view.addSubview(collectionView)
-        
-        collectionView.dataSource = self
     }
     
     private func setupConstrains() {
@@ -165,6 +169,7 @@ class MovieDetailController: UIViewController {
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 0
         layout.itemSize = CGSize(width: 100, height: 150)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
@@ -175,19 +180,4 @@ class MovieDetailController: UIViewController {
         return collection
     }()
 
-}
-
-// MARK: Collection DS
-extension MovieDetailController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastViewCell.reusableId, for: indexPath) as! CastViewCell
-        cell.configure(model: casts[indexPath.row])
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(casts.count)
-        return casts.count
-    }
 }
