@@ -28,9 +28,16 @@ class AppCoordinator: CoordinatorProtocol {
     }
     
     func goToDetails(for movieId: Int) {
-        let detailVC = MovieDetailController()
+        let detailVC = MovieDetailViewController()
         detailVC.viewModel = MovieDetailViewModel(movieId: movieId, service: Service(), coordinator: self)
         
         navigationController.pushViewController(detailVC, animated: true)
+    }
+    
+    func goToPerson(for personId: Int) {
+        let personVC = PersonViewController()
+        personVC.viewModel = PersonViewModel(personId: personId, service: Service())
+        
+        navigationController.pushViewController(personVC, animated: true)
     }
 }

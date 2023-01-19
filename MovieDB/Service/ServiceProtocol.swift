@@ -13,6 +13,7 @@ protocol ServiceProtocol: AnyObject {
     func fetchTrending(page: Int) -> Single<TrendingListModel>
     func fetchMovieDetail(movieId: Int) -> Single<MovieDetailModel>
     func fetchMovieCast(movieId: Int) -> Single<MovieCastListModel>
+    func fetchPerson(personId: Int) -> Single<PersonModel>
 }
 
 enum NetworkErrorType: Error {

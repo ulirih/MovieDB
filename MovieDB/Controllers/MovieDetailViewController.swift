@@ -8,9 +8,8 @@
 import UIKit
 import RxSwift
 
-class MovieDetailController: UIViewController {
+class MovieDetailViewController: UIViewController {
     private let disposeBag = DisposeBag()
-    private var casts: [CastModel] = []
     
     var viewModel: MovieDetailViewModelProtocol!
 
@@ -41,7 +40,7 @@ class MovieDetailController: UIViewController {
                 self?.errorView.alpha = 1
             }).disposed(by: disposeBag)
         
-        viewModel.cast
+        viewModel.casts
             .bind(to: collectionView.rx.items(cellIdentifier: CastViewCell.reusableId, cellType: CastViewCell.self)) {
                 indexPath, model, cell in
                 cell.configure(model: model)

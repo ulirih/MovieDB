@@ -31,6 +31,11 @@ class Service: ServiceProtocol {
         return baseRequest(for: urlString)
     }
     
+    func fetchPerson(personId: Int) -> Single<PersonModel> {
+        let urlString = "\(ApiConstant.baseUrl)/person/\(personId)?api_key=\(ApiConstant.apiKey)"
+        return baseRequest(for: urlString)
+    }
+    
     private func baseRequest<T: Decodable>(for urlString: String) -> Single<T> {
         return Single<T>.create { observer in
             guard let url = URL(string: urlString) else {

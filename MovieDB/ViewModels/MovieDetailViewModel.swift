@@ -11,11 +11,11 @@ import RxSwift
 protocol MovieDetailViewModelProtocol: AnyObject {
     var isLoading: PublishSubject<Bool> { get }
     var detail: PublishSubject<MovieDetailModel> { get }
-    var cast: PublishSubject<[CastModel]> { get }
+    var casts: PublishSubject<[CastModel]> { get }
     
     func fetchDetail() -> Void
     func fetchCasts() -> Void
-    func didTapPerson(person model: CastModel) -> Void
+    func didTapPerson(person: CastModel) -> Void
 }
 
 class MovieDetailViewModel: MovieDetailViewModelProtocol {
@@ -26,7 +26,7 @@ class MovieDetailViewModel: MovieDetailViewModelProtocol {
 
     var isLoading: PublishSubject<Bool> = PublishSubject()
     var detail: PublishSubject<MovieDetailModel> = PublishSubject()
-    var cast: PublishSubject<[CastModel]> = PublishSubject()
+    var casts: PublishSubject<[CastModel]> = PublishSubject()
     
     init(movieId: Int, service: ServiceProtocol, coordinator: CoordinatorProtocol) {
         self.service = service
@@ -52,11 +52,11 @@ class MovieDetailViewModel: MovieDetailViewModelProtocol {
             .observe(on: MainScheduler.instance)
             .subscribe(onSuccess: { [weak self] list in
                 let cast = list.cast.filter { $0.knownForDepartment == .acting }.prefix(12)
-                self?.cast.onNext(Array(cast))
+                self?.casts.onNext(Array(cast))
             }).disposed(by: disposeBag)
     }
     
-    func didTapPerson(person model: CastModel) {
-        print(model)
+    func didTapPerson(person: CastModel) {
+        coordinator.goToPerson(for: person.id)
     }
 }

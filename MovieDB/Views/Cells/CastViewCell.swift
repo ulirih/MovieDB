@@ -19,7 +19,7 @@ class CastViewCell: UICollectionViewCell {
     
     func configure(model: CastModel) {
         nameLabel.text = model.name
-        personImage.sd_setImage(with: URL(string: model.profileImageUrl), completed: nil)
+        personImage.sd_setImage(with: URL(string: model.profileImageUrl), placeholderImage: UIImage(named: "user"))
         layoutIfNeeded()
     }
     
