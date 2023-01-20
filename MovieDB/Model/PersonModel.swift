@@ -8,18 +8,19 @@
 import Foundation
 
 struct PersonModel: Codable {
-    let birthday, knownForDepartment: String
+    let birthday: String?
+    let knownForDepartment: String?
     let deathday: String?
     let id: Int
     let name: String
     let alsoKnownAs: [String]
     let gender: Int
     let biography: String
-    let popularity: Double
-    let placeOfBirth: String
+    let popularity: Double?
+    let placeOfBirth: String?
     let profilePath: String?
     let adult: Bool
-    let imdbID: String
+    let imdbID: String?
     let homepage: String?
     
     var profileImageUrl: String {

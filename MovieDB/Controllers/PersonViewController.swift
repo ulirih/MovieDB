@@ -37,7 +37,7 @@ class PersonViewController: UIViewController {
                 self?.personNameLabel.text = person.name
                 self?.descriptionLabel.text = person.biography
             } onError: { error in
-                print(error.localizedDescription)
+                self.view.addSubview(ErrorView(center: self.view.center))
             }.disposed(by: disposeBag)
         
         viewModel.isLoading
@@ -68,13 +68,13 @@ class PersonViewController: UIViewController {
             loaderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             descriptionLabel.topAnchor.constraint(equalTo: personNameLabel.bottomAnchor, constant: 18),
-            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            descriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            descriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
@@ -134,10 +134,9 @@ class PersonViewController: UIViewController {
     }()
     
     private let scrollView: UIScrollView = {
-        let bt = UIButton()
-        
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.showsVerticalScrollIndicator = false
         return scroll
     }()
 }

@@ -14,6 +14,12 @@ class ErrorView: UIView {
         setup()
     }
     
+    init(center: CGPoint) {
+        super.init(frame: .zero)
+        self.center = center
+        setup()
+    }
+    
     private func setup() {
         addSubview(image)
         addSubview(label)
