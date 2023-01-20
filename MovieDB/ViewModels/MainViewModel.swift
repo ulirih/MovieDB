@@ -10,10 +10,12 @@ import RxSwift
 
 protocol MainViewModelProtocol: AnyObject {
     var isLoading: PublishSubject<Bool> { get }
+    var isEnableLoadMore: Bool { get }
     var nowPlaying: PublishSubject<[PlayNowModel]> { get }
     var trendings: PublishSubject<[TrendingModel]> { get }
     
-    func fetchData() -> Void
+    func fetchNowPlaying() -> Void
+    func fetchTrendings() -> Void
     func didTapMovie(movieId: Int) -> Void
 }
 
@@ -22,7 +24,10 @@ class MainViewModel: MainViewModelProtocol {
     private let service: ServiceProtocol
     private weak var coordinator: CoordinatorProtocol?
     
+    private var currentPage: Int = 0
+    
     var isLoading: PublishSubject<Bool> = PublishSubject()
+    var isEnableLoadMore: Bool = false
     var nowPlaying: PublishSubject<[PlayNowModel]> = PublishSubject()
     var trendings: PublishSubject<[TrendingModel]> = PublishSubject()
     
@@ -31,20 +36,24 @@ class MainViewModel: MainViewModelProtocol {
         self.coordinator = coordinator
     }
     
-    func fetchData() {
-        isLoading.onNext(true)
-
+    func fetchNowPlaying() {
         service.fetchNowPlaying()
             .subscribe { movies in
                 self.nowPlaying.onNext(movies.results)
             } onFailure: { error in
                 self.nowPlaying.onNext([])
             }.disposed(by: disposeBag)
-        
-        service.fetchTrending(page: 1)
+    }
+    
+    func fetchTrendings() {
+        isLoading.onNext(true)
+        currentPage += 1
+        service.fetchTrending(page: currentPage)
             .subscribe { listModel in
+                self.isEnableLoadMore = listModel.totalPages > self.currentPage
                 self.isLoading.onNext(false)
                 self.trendings.onNext(listModel.results)
+                
             } onFailure: { error in
                 print(error.localizedDescription)
             }.disposed(by: disposeBag)

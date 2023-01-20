@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class HeaderCell: UICollectionReusableView {
+class HeaderViewCell: UICollectionReusableView {
     static let reusableId = "HeaderCell"
     
     let textLabel = UILabel()

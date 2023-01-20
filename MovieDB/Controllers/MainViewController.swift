@@ -26,7 +26,8 @@ class MainViewController: UIViewController {
         setupBind()
         setupConstraints()
         
-        viewModel.fetchData()
+        viewModel.fetchNowPlaying()
+        viewModel.fetchTrendings()
     }
     
     private func setupView() {
@@ -49,8 +50,12 @@ class MainViewController: UIViewController {
         viewModel.trendings
             .subscribe(onNext: { [weak self] trendings in
                 guard let self = self else { return }
+                
                 var snapshot = self.dataSource.snapshot()
-                snapshot.appendSections([.trendings])
+                if !snapshot.sectionIdentifiers.contains(.trendings) {
+                    // add section only on first load
+                    snapshot.appendSections([.trendings])
+                }
                 snapshot.appendItems(trendings, toSection: .trendings)
                 self.dataSource.apply(snapshot)
             })
@@ -99,7 +104,8 @@ class MainViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(TrendMovieViewCell.self, forCellWithReuseIdentifier: TrendMovieViewCell.reusableId)
         collectionView.register(NowPlayingViewCell.self, forCellWithReuseIdentifier: NowPlayingViewCell.reusableId)
-        collectionView.register(HeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCell.reusableId)
+        collectionView.register(HeaderViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderViewCell.reusableId)
+        collectionView.register(LoadMoreViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: LoadMoreViewCell.reusableId)
         createDataSource()
     }
 }
@@ -122,9 +128,24 @@ extension MainViewController {
             }
         })
         
-        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
-            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderCell.reusableId, for: indexPath) as! HeaderCell
+        dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+
+            // load more footer
+            if kind == UICollectionView.elementKindSectionFooter {
+                let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: LoadMoreViewCell.reusableId, for: indexPath) as! LoadMoreViewCell
+                if let self = self, self.viewModel.isEnableLoadMore {
+                    cell.loaderView.startAnimating()
+                    self.viewModel.fetchTrendings()
+                } else {
+                    cell.loaderView.stopAnimating()
+                }
+                
+                return cell
+            }
+            
+            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderViewCell.reusableId, for: indexPath) as! HeaderViewCell
             cell.textLabel.text = MainViewSections(rawValue: indexPath.section)?.title.uppercased()
+            
             return cell
         }
     }
@@ -154,7 +175,7 @@ extension MainViewController {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPagingCentered
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
-        section.boundarySupplementaryItems = [headerSection()]
+        section.boundarySupplementaryItems = [getHeaderSection()]
         
         return section
     }
@@ -169,18 +190,56 @@ extension MainViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0)
-        section.boundarySupplementaryItems = [headerSection()]
+        section.boundarySupplementaryItems = [getHeaderSection(), getFooterSection()]
         
         return section
     }
     
-    private func headerSection() -> NSCollectionLayoutBoundarySupplementaryItem {
+    private func getHeaderSection() -> NSCollectionLayoutBoundarySupplementaryItem {
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(28))
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
+        
         return sectionHeader
+    }
+    
+    private func getFooterSection() -> NSCollectionLayoutBoundarySupplementaryItem {
+        let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(48))
+        let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerSize,
+            elementKind: UICollectionView.elementKindSectionFooter,
+            alignment: .bottom
+        )
+        
+        return sectionFooter
+    }
+}
+
+class LoadMoreViewCell: UICollectionReusableView {
+    static let reusableId = "LoadMoreViewCell"
+    
+    let loaderView = UIActivityIndicatorView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        loaderView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(loaderView)
+        
+        setupConstrains()
+    }
+    
+    private func setupConstrains() {
+        NSLayoutConstraint.activate([
+            loaderView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            loaderView.centerYAnchor.constraint(equalTo: centerYAnchor),
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

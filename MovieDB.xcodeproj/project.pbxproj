@@ -26,7 +26,7 @@
 		55AECFCF295F073700648018 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFCE295F073700648018 /* UIFontExtensions.swift */; };
 		55AECFD1295F09C500648018 /* MarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFD0295F09C500648018 /* MarkView.swift */; };
 		55AECFD3296D7FDB00648018 /* NowPlayingViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFD2296D7FDB00648018 /* NowPlayingViewCell.swift */; };
-		55AECFD5296DB36F00648018 /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFD4296DB36F00648018 /* HeaderCell.swift */; };
+		55AECFD5296DB36F00648018 /* HeaderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFD4296DB36F00648018 /* HeaderViewCell.swift */; };
 		55AECFD82970702400648018 /* CoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFD72970702400648018 /* CoordinatorProtocol.swift */; };
 		55AECFDA2970705300648018 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFD92970705300648018 /* AppCoordinator.swift */; };
 		55AECFDC29707C3600648018 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AECFDB29707C3600648018 /* MovieDetailViewController.swift */; };
@@ -64,7 +64,7 @@
 		55AECFCE295F073700648018 /* UIFontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
 		55AECFD0295F09C500648018 /* MarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkView.swift; sourceTree = "<group>"; };
 		55AECFD2296D7FDB00648018 /* NowPlayingViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingViewCell.swift; sourceTree = "<group>"; };
-		55AECFD4296DB36F00648018 /* HeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCell.swift; sourceTree = "<group>"; };
+		55AECFD4296DB36F00648018 /* HeaderViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderViewCell.swift; sourceTree = "<group>"; };
 		55AECFD72970702400648018 /* CoordinatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorProtocol.swift; sourceTree = "<group>"; };
 		55AECFD92970705300648018 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		55AECFDB29707C3600648018 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
@@ -193,7 +193,7 @@
 			children = (
 				55AECFC2295DB70A00648018 /* TrendMovieViewCell.swift */,
 				55AECFD2296D7FDB00648018 /* NowPlayingViewCell.swift */,
-				55AECFD4296DB36F00648018 /* HeaderCell.swift */,
+				55AECFD4296DB36F00648018 /* HeaderViewCell.swift */,
 				55AECFE529783D4000648018 /* CastViewCell.swift */,
 			);
 			path = Cells;
@@ -385,7 +385,7 @@
 				55AECFEA2979816600648018 /* PersonViewModel.swift in Sources */,
 				55A5D5BE2954EF8A0049533D /* TrendingListModel.swift in Sources */,
 				55AECFE42978329F00648018 /* MovieCastModel.swift in Sources */,
-				55AECFD5296DB36F00648018 /* HeaderCell.swift in Sources */,
+				55AECFD5296DB36F00648018 /* HeaderViewCell.swift in Sources */,
 				55A5D5C02954F0F10049533D /* TrendingModel.swift in Sources */,
 				55AECFDA2970705300648018 /* AppCoordinator.swift in Sources */,
 				55AECFC0295C4F5C00648018 /* MainViewSections.swift in Sources */,
