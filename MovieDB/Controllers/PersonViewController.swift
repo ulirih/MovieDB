@@ -32,9 +32,10 @@ class PersonViewController: UIViewController {
     
     private func setupBindings() {
         viewModel.person
-            .subscribe { person in
-                self.personImage.sd_setImage(with: URL(string: person.profileImageUrl), placeholderImage: UIImage(named: "user"))
-                self.personNameLabel.text = person.name
+            .subscribe { [weak self] person in
+                self?.personImage.sd_setImage(with: URL(string: person.profileImageUrl), placeholderImage: UIImage(named: "user"))
+                self?.personNameLabel.text = person.name
+                self?.descriptionLabel.text = person.biography
             } onError: { error in
                 print(error.localizedDescription)
             }.disposed(by: disposeBag)
@@ -45,14 +46,19 @@ class PersonViewController: UIViewController {
     }
     
     private func setupViews() {
-        view.addSubview(personImage)
-        view.addSubview(personNameLabel)
+        contentView.addSubview(personImage)
+        contentView.addSubview(personNameLabel)
+        contentView.addSubview(loaderView)
+        contentView.addSubview(descriptionLabel)
+        
+        scrollView.addSubview(contentView)
+        view.addSubview(scrollView)
     }
     
     private func setupConstrains() {
         NSLayoutConstraint.activate([
-            personImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
-            personImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            personImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            personImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             
             personNameLabel.topAnchor.constraint(equalTo: personImage.bottomAnchor, constant: 8),
             personNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -60,6 +66,21 @@ class PersonViewController: UIViewController {
             
             loaderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loaderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            descriptionLabel.topAnchor.constraint(equalTo: personNameLabel.bottomAnchor, constant: 18),
+            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ])
     }
     
@@ -87,11 +108,36 @@ class PersonViewController: UIViewController {
         return label
     }()
     
+    private let descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.getNunitoFont(type: .regular)
+        label.textColor = .label.withAlphaComponent(0.8)
+        label.numberOfLines = 0
+        
+        return label
+    }()
+    
     private let loaderView: UIActivityIndicatorView = {
         let loader = UIActivityIndicatorView()
         loader.translatesAutoresizingMaskIntoConstraints = false
         loader.style = .large
         
         return loader
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private let scrollView: UIScrollView = {
+        let bt = UIButton()
+        
+        let scroll = UIScrollView()
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        return scroll
     }()
 }
