@@ -49,13 +49,14 @@ class MainViewModel: MainViewModelProtocol {
         isLoading.onNext(true)
         currentPage += 1
         service.fetchTrending(page: currentPage)
-            .subscribe { listModel in
+            .subscribe { [weak self] listModel in
+                guard let self = self else { return }
                 self.isEnableLoadMore = listModel.totalPages > self.currentPage
                 self.isLoading.onNext(false)
                 self.trendings.onNext(listModel.results)
                 
-            } onFailure: { error in
-                print(error.localizedDescription)
+            } onFailure: { [weak self] error in
+                self?.isEnableLoadMore = false
             }.disposed(by: disposeBag)
     }
     

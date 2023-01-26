@@ -22,7 +22,7 @@ class Service: ServiceProtocol {
     }
     
     func fetchTrending(page: Int) -> Single<TrendingListModel> {
-        let urlString = "\(ApiConstant.baseUrl)/trending/all/day?api_key=\(ApiConstant.apiKey)&page=\(String(describing: page))"
+        let urlString = "\(ApiConstant.baseUrl)/trending/movie/day?api_key=\(ApiConstant.apiKey)&page=\(String(describing: page))"
         return baseRequest(for: urlString)
     }
     
@@ -44,7 +44,6 @@ class Service: ServiceProtocol {
             }
 
             let task = URLSession.shared.dataTask(with: url) { data, responce, error in
-                
                 guard let data = data, error == nil else {
                     observer(.failure(NetworkErrorType.serviceError))
                     return

@@ -53,7 +53,6 @@ class MainViewController: UIViewController {
                 
                 var snapshot = self.dataSource.snapshot()
                 if !snapshot.sectionIdentifiers.contains(.trendings) {
-                    // add section only on first load
                     snapshot.appendSections([.trendings])
                 }
                 snapshot.appendItems(trendings, toSection: .trendings)
@@ -62,6 +61,11 @@ class MainViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.isLoading
+            .observe(on: MainScheduler.instance)
+            .map({ isLoading in
+                // show loader only of first request
+                isLoading && self.dataSource.snapshot().numberOfItems == 0
+            })
             .bind(to: loaderView.rx.isAnimating)
             .disposed(by: disposeBag)
         

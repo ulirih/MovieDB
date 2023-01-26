@@ -32,12 +32,12 @@ class PersonViewModel: PersonViewModelProtocol {
         isLoading.onNext(true)
         service.fetchPerson(personId: personId)
             .observe(on: MainScheduler.instance)
-            .subscribe { person in
-                self.isLoading.onNext(false)
-                self.person.onNext(person)
-            } onFailure: { error in
-                self.isLoading.onNext(false)
-                self.person.onError(error)
+            .subscribe { [weak self] person in
+                self?.isLoading.onNext(false)
+                self?.person.onNext(person)
+            } onFailure: { [weak self] error in
+                self?.isLoading.onNext(false)
+                self?.person.onError(error)
             }.disposed(by: disposeBag)
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 
 struct TrendingModel: Codable, Hashable {
     let adult: Bool
-    let backdropPath: String
+    let backdropPath: String?
     let id: Int
     let title: String?
     let originalTitle: String?
@@ -29,7 +29,7 @@ struct TrendingModel: Codable, Hashable {
     }
     
     var backdropUrl: String {
-        return ApiConstant.baseImageUrl + self.backdropPath
+        return ApiConstant.baseImageUrl + (self.backdropPath ?? "")
     }
     
     var dateDisplay: String {
