@@ -1,4 +1,4 @@
-#### MovieDB <br>
+### MovieDB <br>
 Application use [themoviedb](https://themoviedb.org) API
 <ul>
   <li>Swift, MVVM + Coordinator</li>
